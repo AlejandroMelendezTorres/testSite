@@ -1,0 +1,221 @@
+/*
+ * Layout for the main content area, offsetting the fixed sidebar
+ */
+.mainContent {
+    /* Pushes content past the fixed sidebar width */
+    margin-left: 250px; 
+    padding: 0;
+    background-color: var(--color-background);
+    /* Ensures content covers full window height */
+    min-height: 100vh; 
+    width: calc(100vw - 250px);
+    overflow-x: hidden; 
+    overflow-y: auto; 
+}
+
+
+/* Dashboard Content Styling */
+.dashboardContainer {
+    padding: 30px;
+    font-family: sans-serif;
+    color: var(--color-text-dark); 
+}
+
+/* Charts Grid Layout (2x2 Quadrants) */
+.chartsGrid {
+    display: grid;
+    
+    /* 2 COLUMNS: Charts fit side-by-side */
+    grid-template-columns: 1fr 1fr; 
+    gap: 20px; 
+    margin-top: 20px;
+    
+    /* Dynamic height for charts on large screens (roughly 40% of viewport) */
+    grid-auto-rows: 40vh; 
+}
+
+
+/* Chart Card Styling */
+.chartCard {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: box-shadow 0.3s, transform 0.3s;
+    min-height: 0;
+    height: 100%;
+    max-height: 100%;
+    box-sizing: border-box;
+}
+
+/* Style to make the card clickable */
+.clickableCard {
+    cursor: pointer;
+}
+
+.clickableCard:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); 
+    transform: translateY(-2px);
+}
+
+/* Chart Header */
+.cardHeader {
+    color: var(--color-text-dark); /* Using dark text variable */
+    margin-top: 0;
+    border-bottom: 2px solid var(--color-accent);
+    padding-bottom: 8px;
+    font-size: 1.1em;
+    cursor: default; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.configIcon {
+    font-size: 0.8em;
+    color: var(--color-accent);
+    margin-left: 10px;
+}
+
+
+.chartWrapper {
+    flex: 1 1 0%;
+    min-height: 0;
+    position: relative;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Target the chart canvas to ensure it stretches */
+.chartWrapper canvas {
+    height: 100% !important;
+    width: 100% !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    min-width: 0 !important;
+    display: block;
+    box-sizing: border-box;
+}
+
+/* Modal/Menu Styles */
+.settingsModalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 2000; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingsMenu {
+    background-color: var(--color-card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+    width: 400px;
+    max-width: 90%;
+}
+
+.settingsMenu h4 {
+    color: var(--color-text-dark); /* Using dark text variable */
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.settingsMenu label {
+    display: block;
+    margin-bottom: 15px;
+    font-weight: 600;
+    color: var(--color-text-dark); /* Using dark text variable */
+}
+
+.settingsMenu select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.buttonGroup {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.applyButton, .cancelButton {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.applyButton {
+    background-color: var(--color-accent);
+    color: var(--color-card-bg);
+}
+
+.applyButton:hover {
+    background-color: #2980b9;
+}
+
+.cancelButton {
+    background-color: #ecf0f1;
+    color: #7f8c8d;
+}
+
+.cancelButton:hover {
+    background-color: #dce0e3;
+}
+
+/* --- Media Queries for Responsiveness --- */
+
+/* 🎯 STEP 2: Switch to Single Column when window width is too small for two columns. */
+/* We'll use 1000px as a comfortable breakpoint for tablets/smaller screens */
+@media (max-width: 1000px) {
+    /* Remove the margin from the main content to make space for the sidebar's width */
+    .mainContent {
+        margin-left: 0;
+        width: 100vw;
+        max-width: 100vw;
+        box-sizing: border-box;
+        padding-left: 250px; /* Add left padding only in single-column mode */
+    }
+
+    /* Place sidebar at the top or hide it entirely on mobile; for now, we'll keep it pinned 
+       but you may need to add a toggle for true mobile layouts */
+
+    /* Force the charts to display in a single column */
+    .chartsGrid {
+        grid-template-columns: 1fr; /* 💥 Single column layout */
+        /* Give more vertical space now that they are stacked */
+        grid-auto-rows: 55vh; /* Each chart gets more than half the viewport height */
+    }
+}
+
+/* 🎯 STEP 3: If the screen gets very small (e.g., mobile phone), reduce the chart height. */
+@media (max-width: 600px) {
+    .chartsGrid {
+        /* Reduce the chart height as a last resort */
+        grid-auto-rows: 45vh; 
+    }
+    
+    /* Reduce dashboard padding for very small screens */
+    .dashboardContainer {
+        padding: 15px;
+    }
+}
