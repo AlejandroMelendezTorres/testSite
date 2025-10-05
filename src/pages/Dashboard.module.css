@@ -5,7 +5,7 @@
     /* Pushes content past the fixed sidebar width */
     margin-left: 250px; 
     padding: 0;
-    background-color: var(--color-background);
+    background-color: var(--color-background); /* Body background */
     /* Ensures content covers full window height */
     min-height: 100vh; 
     width: calc(100vw - 250px);
@@ -14,30 +14,91 @@
 }
 
 
-/* Dashboard Content Styling */
+/* Dashboard Content Container (for content below sticky header) */
 .dashboardContainer {
     padding: 30px;
     font-family: sans-serif;
     color: var(--color-text-dark); 
 }
 
-/* Charts Grid Layout (2x2 Quadrants) */
-.chartsGrid {
-    display: grid;
-    
-    /* 2 COLUMNS: Charts fit side-by-side */
-    grid-template-columns: 1fr 1fr; 
-    gap: 20px; 
-    margin-top: 20px;
-    
-    /* Dynamic height for charts on large screens (roughly 40% of viewport) */
-    grid-auto-rows: 40vh; 
+/* PAGE HEADER STYLES */
+.pageHeader {
+    /* 💥 MODIFIED: Use --color-background for matching body color */
+    background-color: var(--color-background); 
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    padding: 18px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 1500;
+}
+
+.headerInner {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.headerInner h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--color-text-dark);
+}
+
+/* Header containing the Title and the Toggle Elements */
+.dashboardHeader {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    margin-bottom: 0; 
+}
+
+/* Toggle H5 Group Container (styles remain the same) */
+.modeToggleGroup {
+    display: flex;
+    gap: 5px;
+    background-color: transparent;
+    border-radius: 4px;
+}
+
+/* Toggle H5 Element Style (styles remain the same) */
+.modeToggle {
+    margin: 0;
+    padding: 8px 12px;
+    background-color: transparent;
+    border: 1px solid transparent;
+    cursor: pointer; 
+    font-weight: 600;
+    font-size: 0.9em;
+    transition: color 0.2s;
+    color: #95a5a6; 
+}
+
+/* Active State: Live Metrics (Live Mode) is Dark Red */
+.modeToggle.activeLive {
+    color: #ff0000; 
+    border-color: transparent;
+}
+
+/* Active State: StartDate - EndDate (Custom Mode) is Black */
+.modeToggle.activeCustom {
+    color: #000000; 
+    border-color: transparent;
 }
 
 
+/* Charts Grid Layout (rest of styles for charts and modal are unchanged) */
+.chartsGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; 
+    margin-top: 20px;
+    grid-auto-rows: 40vh; 
+}
+
 /* Chart Card Styling */
 .chartCard {
-    background-color: var(--color-card-bg);
+    /* This color should remain different to stand out from the body/header/footer */
+    background-color: var(--color-card-bg); 
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -51,7 +112,6 @@
     box-sizing: border-box;
 }
 
-/* Style to make the card clickable */
 .clickableCard {
     cursor: pointer;
 }
@@ -61,9 +121,8 @@
     transform: translateY(-2px);
 }
 
-/* Chart Header */
 .cardHeader {
-    color: var(--color-text-dark); /* Using dark text variable */
+    color: var(--color-text-dark); 
     margin-top: 0;
     border-bottom: 2px solid var(--color-accent);
     padding-bottom: 8px;
@@ -80,7 +139,6 @@
     margin-left: 10px;
 }
 
-
 .chartWrapper {
     flex: 1 1 0%;
     min-height: 0;
@@ -91,7 +149,6 @@
     justify-content: center;
 }
 
-/* Target the chart canvas to ensure it stretches */
 .chartWrapper canvas {
     height: 100% !important;
     width: 100% !important;
@@ -103,7 +160,7 @@
     box-sizing: border-box;
 }
 
-/* Modal/Menu Styles */
+/* Modal/Menu Styles (unchanged) */
 .settingsModalOverlay {
     position: fixed;
     top: 0;
@@ -127,7 +184,7 @@
 }
 
 .settingsMenu h4 {
-    color: var(--color-text-dark); /* Using dark text variable */
+    color: var(--color-text-dark); 
     margin-top: 0;
     margin-bottom: 20px;
 }
@@ -136,7 +193,7 @@
     display: block;
     margin-bottom: 15px;
     font-weight: 600;
-    color: var(--color-text-dark); /* Using dark text variable */
+    color: var(--color-text-dark); 
 }
 
 .settingsMenu select {
@@ -182,40 +239,113 @@
     background-color: #dce0e3;
 }
 
-/* --- Media Queries for Responsiveness --- */
+/* PAGE FOOTER STYLES */
+.pageFooter {
+    border-top: 1px solid rgba(0,0,0,0.06);
+    /* 💥 MODIFIED: Use --color-background for matching body color */
+    background-color: var(--color-background); 
+    padding: 12px 30px;
+    margin-top: 20px;
+}
 
-/* 🎯 STEP 2: Switch to Single Column when window width is too small for two columns. */
-/* We'll use 1000px as a comfortable breakpoint for tablets/smaller screens */
+.footerInner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-dark); /* Use theme text color */
+    font-size: 0.9rem;
+}
+
+.footerSmall {
+    opacity: 0.7;
+}
+
+/* --- Media Queries for Responsiveness (unchanged) --- */
 @media (max-width: 1000px) {
-    /* Remove the margin from the main content to make space for the sidebar's width */
     .mainContent {
         margin-left: 0;
         width: 100vw;
         max-width: 100vw;
         box-sizing: border-box;
-        padding-left: 250px; /* Add left padding only in single-column mode */
+        padding-left: 250px; 
     }
 
-    /* Place sidebar at the top or hide it entirely on mobile; for now, we'll keep it pinned 
-       but you may need to add a toggle for true mobile layouts */
-
-    /* Force the charts to display in a single column */
     .chartsGrid {
-        grid-template-columns: 1fr; /* 💥 Single column layout */
-        /* Give more vertical space now that they are stacked */
-        grid-auto-rows: 55vh; /* Each chart gets more than half the viewport height */
+        grid-template-columns: 1fr;
+        grid-auto-rows: 55vh; 
     }
 }
 
-/* 🎯 STEP 3: If the screen gets very small (e.g., mobile phone), reduce the chart height. */
 @media (max-width: 600px) {
+    .mainContent {
+        margin-left: 0;
+        padding-left: 0;
+        width: 100vw;
+    }
+
     .chartsGrid {
-        /* Reduce the chart height as a last resort */
+        grid-template-columns: 1fr;
         grid-auto-rows: 45vh; 
     }
     
-    /* Reduce dashboard padding for very small screens */
     .dashboardContainer {
         padding: 15px;
     }
+}
+
+/* 💥 NEW: Section container for the picker card */
+.datePickerSection {
+    margin-bottom: 30px;
+    padding: 0 30px; /* Match dashboard container padding */
+}
+
+.datePickerCard {
+    background-color: var(--color-card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    border-left: 5px solid var(--color-accent);
+}
+
+.pickerHeader {
+    color: var(--color-text-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.datePickerGroup {
+    display: flex;
+    gap: 30px;
+    padding: 15px 0;
+    border-top: 1px dashed #ccc;
+    border-bottom: 1px dashed #ccc;
+    margin-bottom: 15px;
+}
+
+.dateLabel {
+    font-weight: 600;
+    color: var(--color-text-dark);
+    display: block;
+}
+
+.dateInput {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    display: block;
+    box-sizing: border-box;
+    /* Ensuring date input is readable in dark mode */
+    background-color: var(--color-background); 
+    color: var(--color-text-dark);
+}
+
+.timeInfo {
+    font-size: 0.9em;
+    color: #7f8c8d;
+    margin: 0;
 }
