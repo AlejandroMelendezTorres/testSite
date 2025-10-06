@@ -11,16 +11,31 @@ const navLinks = [
 ];
 
 /**
- * A pinned sidebar navigation component.
+ * Sidebar
+ * -------
+ * Pinned navigation on the left. On wide screens it is always visible; on
+ * narrow screens it becomes a slide-in panel controlled by `isMobileMenuOpen`.
+ *
+ * Props:
+ * - isMobileMenuOpen: boolean to indicate mobile menu visibility
+ * - toggleMenu: function to toggle the mobile menu state
  */
-function Sidebar() {
+function Sidebar({ isMobileMenuOpen, toggleMenu }) {
+  
+  // Close the menu if a link is clicked on mobile (optional, but good UX)
+  const handleLinkClick = () => {
+      if (isMobileMenuOpen) {
+          toggleMenu();
+      }
+  };
+
   return (
-    <aside className={styles.sidebar}>
+    // Apply a class that the CSS module can use to control visibility
+    <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.mobileOpen : ''}`}>
       
       {/* A. Logo Section */}
       <div className={styles.logoContainer}>
-        <h1 className={styles.logo}>AppLogo</h1>
-        <span className={styles.tagline}>Product Name</span>
+        <img src="../assets/logo.png" alt="App Logo" className={styles.logo} />
       </div>
 
       <hr className={styles.divider} />
@@ -35,6 +50,7 @@ function Sidebar() {
               icon={link.icon}
               name={link.name}
               isCurrent={link.current}
+              onClick={handleLinkClick}
             />
           ))}
         </ul>

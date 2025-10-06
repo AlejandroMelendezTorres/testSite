@@ -2,15 +2,19 @@ import React from 'react';
 import styles from './Sidebar.module.css'; 
 
 /**
- * Component for a single navigation link.
+ * NavLink
+ * -------
+ * Simple nav item used inside the Sidebar. Keeps markup accessible and
+ * applies the 'current' styling when `isCurrent` is true.
  */
-function NavLink({ path, icon, name, isCurrent }) {
+function NavLink({ path, icon, name, isCurrent, onClick }) {
   return (
     <li>
       <a 
         href={path} 
         className={`${styles.navLink} ${isCurrent ? styles.current : ''}`}
         aria-current={isCurrent ? 'page' : undefined}
+        onClick={onClick}
       >
         <span className={styles.icon}>{icon}</span>
         {name}

@@ -1,66 +1,78 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import styles from '../pages/Dashboard.module.css';
+// 💥 NEW IMPORT
+import { fetchMetricTypes } from '../api/metrics';
 
-// Register necessary Chart.js components
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-
-// Mock options for the metrics variable menu
-const availableMetrics = ['Revenue', 'Users', 'Sessions', 'Alerts', 'Cost'];
+// Register necessary Chart.js components and plugins (including Filler for area fills)
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
 /**
  * Helper function to resolve a CSS variable to its actual computed color value.
- * This is crucial for passing colors correctly to Chart.js.
  */
 const resolveCssColor = (cssVar) => {
     if (typeof document === 'undefined' || !cssVar.startsWith('var(')) {
         return cssVar;
     }
-    
-    // Extract the variable name, e.g., '--chart-color-1'
     const varName = cssVar.substring(4, cssVar.length - 1).trim();
-    
-    // Get the computed style of the root element (where variables are defined)
     const resolved = window.getComputedStyle(document.documentElement).getPropertyValue(varName).trim();
-    
-    // Return the resolved value (e.g., '#3498db' or 'rgb(52, 152, 219)')
     return resolved || cssVar; 
 };
 
 
 /**
- * Component for a single Line Chart visualization with interactive settings.
+ * ChartCard
+ * ---------
+ * Renders a single line chart inside a styled card. Now dynamically sets
+ * title and labels based on the passed metric index and fetched types.
  */
-function ChartCard({ chartId, chartTitle, xData, yData, xLabel, yLabel, initialType, initialColor, isMenuOpen, onToggle }) {
+function ChartCard({ chartId, metricIndex, isLive, startDate, finishDate, chartColor, xData, yData, isMenuOpen, onToggle }) {
   
-  // State to store the actual color value once resolved from the CSS variable
-  const [resolvedColor, setResolvedColor] = useState(resolveCssColor(initialColor));
+  // 💥 NEW STATE: To hold the fetched list of available metric types
+  const [metricTypes, setMetricTypes] = useState([]);
+  const [resolvedChartColor, setResolvedChartColor] = useState(resolveCssColor(chartColor));
 
-  // 💥 FIX: Initialize chartConfig using the resolved color
-  const [chartConfig, setChartConfig] = useState({
-    title: chartTitle,
-    type: initialType,
-    color: resolvedColor, 
-  });
-  
-  // Effect to handle color changes if props were dynamic (good practice, though not strictly needed for constant props)
+  // 💥 NEW EFFECT: Fetch metric types once to map index to name
   useEffect(() => {
-    setResolvedColor(resolveCssColor(initialColor));
-    setChartConfig(prev => ({ ...prev, color: resolveCssColor(initialColor) }));
-  }, [initialColor]);
+    let mounted = true;
+    fetchMetricTypes()
+      .then(data => {
+          if (!mounted) return;
+          setMetricTypes(data);
+      })
+      .catch(err => {
+          if (!mounted) return;
+          console.error('Failed to fetch metric types in ChartCard:', err);
+          // Fallback list
+          setMetricTypes(['Revenue', 'Users', 'Sessions', 'Alerts', 'Cost']); 
+      });
+    return () => { mounted = false; };
+  }, []); // Run once on mount
+
+
+  // Resolve the CSS color variable
+  useEffect(() => {
+    setResolvedChartColor(resolveCssColor(chartColor));
+  }, [chartColor]);
+
+  // 💥 NEW LOGIC: Derive names based on the index and fetched list
+  const currentMetricName = metricTypes[metricIndex] || `Metric Index ${metricIndex}`;
+  const chartTitle = currentMetricName;
+  const xLabel = "Timestamp";
+  const yLabel = currentMetricName;
 
 
   // Define Chart.js data object using props
   const data = {
-    labels: xData,
+    labels: yData, 
     datasets: [
         {
-            label: chartTitle, 
-            // 💥 FIX: Use the resolved color from state for chart rendering
-            data: yData,
-            borderColor: chartConfig.color, 
-            backgroundColor: chartConfig.color + '40', 
+            // 💥 EDITED: Legend is the metric name
+            label: currentMetricName, 
+            data: xData, 
+            borderColor: resolvedChartColor, 
+            backgroundColor: resolvedChartColor + '40', 
             fill: true,
             tension: 0.3,
         },
@@ -72,12 +84,20 @@ function ChartCard({ chartId, chartTitle, xData, yData, xLabel, yLabel, initialT
     maintainAspectRatio: false, 
     plugins: {
       legend: { position: 'top' },
+      // 💥 EDITED: Title is the metric name
       title: { display: true, text: chartTitle }, 
+      subtitle: {
+        display: !isLive, // Show subtitle if not live mode
+        text: `Showing data from ${startDate} to ${finishDate}`,
+        font: { size: 10, style: 'italic' },
+        padding: { top: 0, bottom: 5 }
+      }
     },
     scales: { 
         x: {
             title: {
                 display: true,
+                // 💥 EDITED: X label is fixed to Timestamp
                 text: xLabel, 
             },
         },
@@ -85,80 +105,30 @@ function ChartCard({ chartId, chartTitle, xData, yData, xLabel, yLabel, initialT
             beginAtZero: true,
             title: {
                 display: true,
+                // 💥 EDITED: Y label is the metric name
                 text: yLabel, 
             },
         },
     },
   };
 
-  const handleApplyChanges = (e) => {
-      e.preventDefault();
-      onToggle(e, null); 
-  };
-  
-  const handleVariableChange = (e) => {
-      const { value } = e.target;
-      
-      // Update config. In a real app, this would trigger a data refetch.
-      setChartConfig(prev => ({
-          ...prev,
-          type: value,
-          title: value, 
-      }));
-  };
 
   return (
     <div 
-        className={`${styles.chartCard} ${styles.clickableCard}`} 
+        className={`${styles.chartCard} ${styles.clickableCard} ${isMenuOpen ? styles.editing : ''}`} 
         onClick={(e) => onToggle(e, chartId)}
         title="Click anywhere on the card to change chart variables"
     >
-      
-      {/* Chart Header */}
+      {/* Card header: title and configuration icon */}
       <h4 className={styles.cardHeader}>
-        {chartTitle} Trend 
+        {/* 💥 EDITED: Title is the metric name */}
+        {chartTitle}
         <span className={styles.configIcon}>⚙️</span>
       </h4>
       
-      {/* Chart Visualization */}
       <div className={styles.chartWrapper}>
         <Line data={data} options={options} />
       </div>
-
-      {/* Chart Settings Menu (Modal) */}
-      {isMenuOpen && ( 
-        <div 
-          className={styles.settingsModalOverlay} 
-          onClick={(e) => onToggle(e, null)}
-        >
-          <div className={styles.settingsMenu} onClick={(e) => e.stopPropagation()}> 
-            <h4>Edit Chart Variables: {chartTitle}</h4>
-            
-            <form onSubmit={handleApplyChanges}>
-                {/* Metric Selection */}
-                <label>
-                    Metric:
-                    <select 
-                        name="type" 
-                        value={chartConfig.type} 
-                        onChange={handleVariableChange}
-                    >
-                        {availableMetrics.map(metric => (
-                            <option key={metric} value={metric}>{metric}</option>
-                        ))}
-                    </select>
-                </label>
-                
-                <div className={styles.buttonGroup}>
-                    <button type="submit" className={styles.applyButton}>Apply Changes</button>
-                    <button type="button" onClick={(e) => onToggle(e, null)} className={styles.cancelButton}>
-                        Cancel
-                    </button>
-                </div>
-            </form>
-          </div>
-        </div>
-      )}
       
     </div>
   );

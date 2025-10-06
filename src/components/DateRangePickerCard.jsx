@@ -2,11 +2,16 @@ import React from 'react';
 import styles from '../pages/Dashboard.module.css';
 
 /**
- * Component for displaying the Start Date and End Date inputs.
- * @param {object} props
- * @param {string} props.startDate - The currently selected start date.
- * @param {string} props.finishDate - The currently selected finish date.
- * @param {function} props.onChange - Handler function to update the date state.
+ * DateRangePickerCard
+ * -------------------
+ * Small presentational component that renders two native date inputs
+ * (startDate & finishDate). It is controlled by the parent via props and
+ * notifies changes using `onChange`.
+ *
+ * Props:
+ * - startDate: string (YYYY-MM-DD)
+ * - finishDate: string (YYYY-MM-DD)
+ * - onChange: change handler for inputs
  */
 function DateRangePickerCard({ startDate, finishDate, onChange }) {
   return (

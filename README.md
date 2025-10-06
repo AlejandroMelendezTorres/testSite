@@ -1,16 +1,50 @@
-# React + Vite
+# testSite — Frontend (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Descripción breve
+-----------------
+Este repositorio contiene el frontend de un panel de métricas (dashboard) construido con React y Vite. El objetivo es mostrar series temporales (gráficas) y permitir filtrar por rango de fechas. La aplicación se integra con una API backend (FastAPI) para obtener métricas reales.
 
-Currently, two official plugins are available:
+Estructura principal
+-------------------
+- `src/` — código fuente de la aplicación React.
+	- `pages/DashboardPage.jsx` — Página principal del dashboard con el sidebar, encabezado, y tarjetas de gráficos.
+	- `components/` — Componentes reutilizables (Sidebar, ChartCard, MenuButton, DateRangePickerCard, etc.).
+- `index.html` y `main.jsx` — Punto de entrada de la app.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Características clave
++-------------------
+- Panel con sidebar responsive (hamburguesa en pantallas pequeñas).
+- Cuadrícula 2x2 de tarjetas con gráficos (Chart.js).
+- Selector de rango de fechas que muestra/oculta una tarjeta de selección en modo "Start Date - End Date".
 
-## React Compiler
+Cómo ejecutar (desarrollo)
++-------------------------
+1. Instalar dependencias:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```powershell
+npm install
+```
++
+2. Iniciar el servidor de desarrollo:
 
-## Expanding the ESLint configuration
+```powershell
+npm run dev
+```
++
+3. Abrir `http://localhost:5173` en el navegador.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Notas sobre integración con el backend
++-------------------------------------
+El backend (FastAPI) se espera que corra en `http://localhost:8000`. Asegúrate de iniciar el backend para que las llamadas a la API funcionen desde el frontend. El backend debe permitir CORS desde `http://localhost:5173`.
+
+Contribuir
++----------
+- Abre un pull request con cambios pequeños y descriptivos.
++- Ejecuta eslint antes de commitear: `npm run lint`.
++
+Contacto
++-------
++
+Propietario: Alejandro Melendez Torres
++
+— Fin del README —

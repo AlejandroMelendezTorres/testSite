@@ -1,3 +1,5 @@
+// ESLint configuration used by the project. Customize rules, parser options,
+// and plugin settings here. This file uses modern ESLint config APIs.
 import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'

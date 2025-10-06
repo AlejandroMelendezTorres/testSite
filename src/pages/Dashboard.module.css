@@ -2,13 +2,10 @@
  * Layout for the main content area, offsetting the fixed sidebar
  */
 .mainContent {
-    /* Pushes content past the fixed sidebar width */
-    margin-left: 250px; 
     padding: 0;
-    background-color: var(--color-background); /* Body background */
+    background-color: var(--color-background);
     /* Ensures content covers full window height */
     min-height: 100vh; 
-    width: calc(100vw - 250px);
     overflow-x: hidden; 
     overflow-y: auto; 
 }
@@ -23,13 +20,13 @@
 
 /* PAGE HEADER STYLES */
 .pageHeader {
-    /* 💥 MODIFIED: Use --color-background for matching body color */
-    background-color: var(--color-background); 
+    background-color: var(--color-background);
     border-bottom: 1px solid rgba(0,0,0,0.06);
     padding: 18px 30px;
     position: sticky;
     top: 0;
     z-index: 1500;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .headerInner {
@@ -39,10 +36,37 @@
 }
 
 .headerInner h1 {
+    font-weight: 600;
     margin: 0;
     font-size: 1.25rem;
     color: var(--color-text-dark);
 }
+
+/* 💥 NEW: Menu Button and Title Container */
+.titleContainer {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 0;
+}
+
+
+.menuButton {
+    display: none; /* Base style: Hidden by default */
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    align-self: center;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: transparent;
+    transition: background-color 0.15s;
+}
+
+.menuButton:hover {
+    background-color: rgba(52, 152, 219, 0.08);
+}
+
 
 /* Header containing the Title and the Toggle Elements */
 .dashboardHeader {
@@ -52,7 +76,7 @@
     margin-bottom: 0; 
 }
 
-/* Toggle H5 Group Container (styles remain the same) */
+/* Toggle H5 Group Container */
 .modeToggleGroup {
     display: flex;
     gap: 5px;
@@ -60,7 +84,7 @@
     border-radius: 4px;
 }
 
-/* Toggle H5 Element Style (styles remain the same) */
+/* Toggle H5 Element Style */
 .modeToggle {
     margin: 0;
     padding: 8px 12px;
@@ -70,23 +94,79 @@
     font-weight: 600;
     font-size: 0.9em;
     transition: color 0.2s;
-    color: #95a5a6; 
+    color: #6c7a89; 
 }
 
 /* Active State: Live Metrics (Live Mode) is Dark Red */
 .modeToggle.activeLive {
-    color: #ff0000; 
+    color: #ff0000; /* bright red when Live Metrics is active */
     border-color: transparent;
 }
 
 /* Active State: StartDate - EndDate (Custom Mode) is Black */
 .modeToggle.activeCustom {
-    color: #000000; 
+    color: #000000; /* explicit black when Start Date - End Date is active */
     border-color: transparent;
 }
 
 
-/* Charts Grid Layout (rest of styles for charts and modal are unchanged) */
+/* DATE PICKER CARD STYLES */
+.datePickerSection {
+    margin-bottom: 15px; 
+    /* Add a little space from the sticky header so the card doesn't touch it */
+    padding: 16px 30px; 
+}
+
+.datePickerCard {
+    background-color: var(--color-card-bg); 
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+    padding: 20px;
+    border-left: 5px solid var(--color-accent);
+}
+
+.pickerHeader {
+    color: var(--color-text-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+.datePickerGroup {
+    display: flex;
+    gap: 30px;
+    padding: 15px 0;
+    border-top: 1px dashed rgba(255, 255, 255, 0.1); 
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
+}
+
+.dateLabel {
+    font-weight: 600;
+    color: var(--color-text-dark);
+    display: block;
+}
+
+.dateInput {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2); 
+    border-radius: 4px;
+    font-size: 1em;
+    display: block;
+    box-sizing: border-box;
+    background-color: var(--color-background); 
+    color: var(--color-text-dark);
+}
+
+.timeInfo {
+    font-size: 0.9em;
+    color: #95a5a6; 
+    margin: 0;
+}
+
+/* Charts Grid Layout (2x2 Quadrants) */
 .chartsGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -97,11 +177,11 @@
 
 /* Chart Card Styling */
 .chartCard {
-    /* This color should remain different to stand out from the body/header/footer */
-    background-color: var(--color-card-bg); 
+    background-color: var(--color-card-bg);
     border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
+    /* Reduce top padding so title sits closer to the card edge */
+    padding: 16px; 
     display: flex;
     flex-direction: column;
     position: relative;
@@ -117,16 +197,18 @@
 }
 
 .clickableCard:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15); 
-    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5); 
+    transform: translateY(-3px); 
 }
 
 .cardHeader {
     color: var(--color-text-dark); 
-    margin-top: 0;
-    border-bottom: 2px solid var(--color-accent);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
+    padding-top: 0; /* remove top padding so title is closer to card top */
     padding-bottom: 8px;
+    margin-top: 0; /* reset default heading margin */
     font-size: 1.1em;
+    font-weight: 600;
     cursor: default; 
     display: flex;
     justify-content: space-between;
@@ -160,7 +242,7 @@
     box-sizing: border-box;
 }
 
-/* Modal/Menu Styles (unchanged) */
+/* Modal Styles */
 .settingsModalOverlay {
     position: fixed;
     top: 0;
@@ -203,6 +285,8 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: var(--color-background);
+    color: var(--color-text-dark);
 }
 
 .buttonGroup {
@@ -242,7 +326,6 @@
 /* PAGE FOOTER STYLES */
 .pageFooter {
     border-top: 1px solid rgba(0,0,0,0.06);
-    /* 💥 MODIFIED: Use --color-background for matching body color */
     background-color: var(--color-background); 
     padding: 12px 30px;
     margin-top: 20px;
@@ -253,7 +336,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 10px;
-    color: var(--color-text-dark); /* Use theme text color */
+    color: var(--color-text-dark); 
     font-size: 0.9rem;
 }
 
@@ -261,31 +344,57 @@
     opacity: 0.7;
 }
 
-/* --- Media Queries for Responsiveness (unchanged) --- */
+/* --- Media Queries for Responsiveness --- */
+
+/* 🎯 WIDE SCREENS (1001px+) */
+@media (min-width: 1001px) {
+    /* Main content offset applied only when sidebar is fixed left */
+    .mainContent {
+        margin-left: 250px; 
+        width: calc(100vw - 250px);
+        padding-left: 0; 
+    }
+    .menuButton {
+        display: none; /* Ensure it is explicitly hidden on wide screens */
+    }
+    .dashboardHeader {
+        justify-content: space-between;
+    }
+}
+
+
+/* 🎯 NARROW SCREENS (<= 1000px) */
 @media (max-width: 1000px) {
+    /* FIX: Remove sidebar offset */
     .mainContent {
         margin-left: 0;
         width: 100vw;
         max-width: 100vw;
         box-sizing: border-box;
-        padding-left: 250px; 
+        padding-left: 0; 
+    }
+
+    /* 💥 CRITICAL FIX: Explicitly set the hamburger icon to display: block on mobile */
+    .menuButton {
+        display: inline-flex; /* The override that was previously failing */
+        vertical-align: middle;
+    }
+    
+    .dashboardHeader {
+        justify-content: flex-start;
+        gap: 20px;
+        padding-left: 15px;
     }
 
     .chartsGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; 
         grid-auto-rows: 55vh; 
     }
 }
 
-@media (max-width: 600px) {
-    .mainContent {
-        margin-left: 0;
-        padding-left: 0;
-        width: 100vw;
-    }
 
+@media (max-width: 600px) {
     .chartsGrid {
-        grid-template-columns: 1fr;
         grid-auto-rows: 45vh; 
     }
     
@@ -294,58 +403,13 @@
     }
 }
 
-/* 💥 NEW: Section container for the picker card */
-.datePickerSection {
-    margin-bottom: 30px;
-    padding: 0 30px; /* Match dashboard container padding */
-}
-
-.datePickerCard {
-    background-color: var(--color-card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    padding: 20px;
-    border-left: 5px solid var(--color-accent);
-}
-
-.pickerHeader {
-    color: var(--color-text-dark);
-    margin-top: 0;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-    font-weight: 600;
-}
-
-.datePickerGroup {
-    display: flex;
-    gap: 30px;
-    padding: 15px 0;
-    border-top: 1px dashed #ccc;
-    border-bottom: 1px dashed #ccc;
-    margin-bottom: 15px;
-}
-
-.dateLabel {
-    font-weight: 600;
-    color: var(--color-text-dark);
-    display: block;
-}
-
-.dateInput {
-    padding: 8px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 1em;
-    display: block;
-    box-sizing: border-box;
-    /* Ensuring date input is readable in dark mode */
-    background-color: var(--color-background); 
-    color: var(--color-text-dark);
-}
-
-.timeInfo {
-    font-size: 0.9em;
-    color: #7f8c8d;
-    margin: 0;
+/* Mobile overlay that appears when sidebar is open on small screens */
+.mobileOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.35);
+    z-index: 1500; /* sits above header (1500) originally; set to 1500 so header stays behind but below sidebar (1600) */
 }
