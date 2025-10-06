@@ -1,24 +1,17 @@
-/*
- * Layout for the main content area, offsetting the fixed sidebar
- */
 .mainContent {
     padding: 0;
     background-color: var(--color-background);
-    /* Ensures content covers full window height */
     min-height: 100vh; 
     overflow-x: hidden; 
     overflow-y: auto; 
 }
 
-
-/* Dashboard Content Container (for content below sticky header) */
 .dashboardContainer {
     padding: 30px;
     font-family: sans-serif;
     color: var(--color-text-dark); 
 }
 
-/* PAGE HEADER STYLES */
 .pageHeader {
     background-color: var(--color-background);
     border-bottom: 1px solid rgba(0,0,0,0.06);
@@ -42,7 +35,6 @@
     color: var(--color-text-dark);
 }
 
-/* 💥 NEW: Menu Button and Title Container */
 .titleContainer {
     display: flex;
     align-items: center;
@@ -52,7 +44,7 @@
 
 
 .menuButton {
-    display: none; /* Base style: Hidden by default */
+    display: none;
     cursor: pointer;
     font-size: 1.5rem;
     color: var(--color-accent);
@@ -67,8 +59,6 @@
     background-color: rgba(52, 152, 219, 0.08);
 }
 
-
-/* Header containing the Title and the Toggle Elements */
 .dashboardHeader {
     display: flex;
     justify-content: space-between; 
@@ -76,7 +66,6 @@
     margin-bottom: 0; 
 }
 
-/* Toggle H5 Group Container */
 .modeToggleGroup {
     display: flex;
     gap: 5px;
@@ -84,7 +73,6 @@
     border-radius: 4px;
 }
 
-/* Toggle H5 Element Style */
 .modeToggle {
     margin: 0;
     padding: 8px 12px;
@@ -97,23 +85,18 @@
     color: #6c7a89; 
 }
 
-/* Active State: Live Metrics (Live Mode) is Dark Red */
 .modeToggle.activeLive {
-    color: #ff0000; /* bright red when Live Metrics is active */
+    color: #ff0000;
     border-color: transparent;
 }
 
-/* Active State: StartDate - EndDate (Custom Mode) is Black */
 .modeToggle.activeCustom {
-    color: #000000; /* explicit black when Start Date - End Date is active */
+    color: #000000;
     border-color: transparent;
 }
 
-
-/* DATE PICKER CARD STYLES */
 .datePickerSection {
     margin-bottom: 15px; 
-    /* Add a little space from the sticky header so the card doesn't touch it */
     padding: 16px 30px; 
 }
 
@@ -166,7 +149,6 @@
     margin: 0;
 }
 
-/* Charts Grid Layout (2x2 Quadrants) */
 .chartsGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -175,12 +157,10 @@
     grid-auto-rows: 40vh; 
 }
 
-/* Chart Card Styling */
 .chartCard {
     background-color: var(--color-card-bg);
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); 
-    /* Reduce top padding so title sits closer to the card edge */
     padding: 16px; 
     display: flex;
     flex-direction: column;
@@ -204,9 +184,9 @@
 .cardHeader {
     color: var(--color-text-dark); 
     border-bottom: 1px solid rgba(255, 255, 255, 0.1); 
-    padding-top: 0; /* remove top padding so title is closer to card top */
+    padding-top: 0;
     padding-bottom: 8px;
-    margin-top: 0; /* reset default heading margin */
+    margin-top: 0;
     font-size: 1.1em;
     font-weight: 600;
     cursor: default; 
@@ -242,7 +222,6 @@
     box-sizing: border-box;
 }
 
-/* Modal Styles */
 .settingsModalOverlay {
     position: fixed;
     top: 0;
@@ -323,7 +302,6 @@
     background-color: #dce0e3;
 }
 
-/* PAGE FOOTER STYLES */
 .pageFooter {
     border-top: 1px solid rgba(0,0,0,0.06);
     background-color: var(--color-background); 
@@ -344,28 +322,21 @@
     opacity: 0.7;
 }
 
-/* --- Media Queries for Responsiveness --- */
-
-/* 🎯 WIDE SCREENS (1001px+) */
 @media (min-width: 1001px) {
-    /* Main content offset applied only when sidebar is fixed left */
     .mainContent {
         margin-left: 250px; 
         width: calc(100vw - 250px);
         padding-left: 0; 
     }
     .menuButton {
-        display: none; /* Ensure it is explicitly hidden on wide screens */
+        display: none;
     }
     .dashboardHeader {
         justify-content: space-between;
     }
 }
 
-
-/* 🎯 NARROW SCREENS (<= 1000px) */
 @media (max-width: 1000px) {
-    /* FIX: Remove sidebar offset */
     .mainContent {
         margin-left: 0;
         width: 100vw;
@@ -374,9 +345,8 @@
         padding-left: 0; 
     }
 
-    /* 💥 CRITICAL FIX: Explicitly set the hamburger icon to display: block on mobile */
     .menuButton {
-        display: inline-flex; /* The override that was previously failing */
+        display: inline-flex;
         vertical-align: middle;
     }
     
@@ -403,7 +373,6 @@
     }
 }
 
-/* Mobile overlay that appears when sidebar is open on small screens */
 .mobileOverlay {
     position: fixed;
     top: 0;
@@ -411,5 +380,5 @@
     right: 0;
     bottom: 0;
     background: rgba(0,0,0,0.35);
-    z-index: 1500; /* sits above header (1500) originally; set to 1500 so header stays behind but below sidebar (1600) */
+    z-index: 1500;
 }

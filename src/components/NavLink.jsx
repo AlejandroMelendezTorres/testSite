@@ -1,12 +1,6 @@
 import React from 'react';
 import styles from './Sidebar.module.css'; 
 
-/**
- * NavLink
- * -------
- * Simple nav item used inside the Sidebar. Keeps markup accessible and
- * applies the 'current' styling when `isCurrent` is true.
- */
 function NavLink({ path, icon, name, isCurrent, onClick }) {
   return (
     <li>

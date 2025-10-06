@@ -1,18 +1,6 @@
 import React from 'react';
 import styles from '../pages/Dashboard.module.css';
 
-/**
- * DateRangePickerCard
- * -------------------
- * Small presentational component that renders two native date inputs
- * (startDate & finishDate). It is controlled by the parent via props and
- * notifies changes using `onChange`.
- *
- * Props:
- * - startDate: string (YYYY-MM-DD)
- * - finishDate: string (YYYY-MM-DD)
- * - onChange: change handler for inputs
- */
 function DateRangePickerCard({ startDate, finishDate, onChange }) {
   return (
     <div className={styles.datePickerCard}>

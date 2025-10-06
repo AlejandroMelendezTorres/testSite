@@ -5,10 +5,8 @@ import ChartCard from '../components/ChartCard';
 import ChartSettingsModal from '../components/ChartSettingsModal'; 
 import DateRangePickerCard from '../components/DateRangePickerCard'; 
 import { MenuButton } from '../components/MenuButton';
-// 💥 NEW IMPORT: UserBox (to simulate importing its static data)
 import UserBox from '../components/UserBox';
 
-// Static Data based on previous structure
 const CHART_COLORS = [
   "var(--chart-color-1)", 
   "var(--chart-color-2)", 
@@ -22,8 +20,12 @@ const MOCK_DATA = [
   { xData: [5, 2, 8, 1, 4, 10], yData: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6'] },
 ];
 
-// Helper to define the initial state using indices 0, 1, 2, 3
-const getInitialMetricIndices = () => [0, 1, 2, 3];
+const getInitialMetricIndices = () => { 
+  return UserBox && UserBox.currentUser && UserBox.currentUser.preferredMetrics 
+    ? UserBox.currentUser.preferredMetrics 
+    : [0, 1, 6, 3];
+};
+
 
 
 function DashboardPage() {
@@ -38,16 +40,14 @@ function DashboardPage() {
     finishDate: '2025-12-31',   
   });
 
-  // Helper to initialize charts using the preferred metrics indices
   const initialCharts = getInitialMetricIndices().map((metricIndex, i) => ({
     id: `chart-${i}`, 
-    chartTitle: `Chart ${i + 1}`, // Placeholder title, will be determined in ChartCard
-    type: metricIndex, // Stores the index
+    chartTitle: `Chart ${i + 1}`,
+    type: metricIndex,
     initialColor: CHART_COLORS[i],
-    ...MOCK_DATA[i % MOCK_DATA.length] // Assign mock data circularly
+    ...MOCK_DATA[i % MOCK_DATA.length]
   }));
 
-  // 💥 EDITED: Initialize charts using the list of indices
   const [charts, setCharts] = useState(initialCharts);
 
   const handleTimeChange = (e) => {
@@ -64,15 +64,13 @@ function DashboardPage() {
     if (e && e.stopPropagation) e.stopPropagation(); 
 
     if (newConfig && activeChartId) {
-        // newConfig.type is the new index (as a string)
         const newMetricIndex = parseInt(newConfig.type, 10);
         
         setCharts(prevCharts => prevCharts.map(chart => {
             if (chart.id === activeChartId) {
                 return {
                     ...chart,
-                    // Title is determined in ChartCard now
-                    type: newMetricIndex,       // Update the metric index
+                    type: newMetricIndex,
                 };
             }
             return chart;
@@ -90,7 +88,6 @@ function DashboardPage() {
     if (activeChartId !== id) {
         setActiveChartId(id);
         const config = findChartConfig(id);
-        // Pass the current metric INDEX as initialType (must be converted to string for select default value)
         setEditingChart({ ...config, initialType: String(config.type) }); 
     } else {
         setActiveChartId(null);
@@ -98,7 +95,6 @@ function DashboardPage() {
     }
   };
   
-  // 💥 NEW: Convert viewMode string to isLive boolean
   const isLive = viewMode === 'live';
 
   return (
@@ -107,7 +103,6 @@ function DashboardPage() {
       
       <main className={styles.mainContent} onClick={handleModalClose}> 
         
-        {/* PAGE HEADER COMPONENT */}
         <div className={styles.pageHeader}>
           <div className={styles.headerInner}>
             <header className={styles.dashboardHeader}>
@@ -134,7 +129,6 @@ function DashboardPage() {
           </div>
         </div>
         
-        {/* Date Picker Card */}
         {viewMode === 'custom' && (
             <section className={styles.datePickerSection}>
                 <DateRangePickerCard 
@@ -151,13 +145,11 @@ function DashboardPage() {
               <ChartCard 
                 key={config.id}
                 chartId={config.id} 
-                // 💥 NEW/EDITED PROPS
-                metricIndex={config.type} // Pass the index
+                metricIndex={config.type}
                 isLive={isLive}
                 startDate={timeState.startDate}
                 finishDate={timeState.finishDate}
-                chartColor={config.initialColor} // Renamed for clarity in ChartCard
-                // Existing props
+                chartColor={config.initialColor}
                 xData={config.xData}
                 yData={config.yData}
                 isMenuOpen={activeChartId === config.id} 
@@ -182,7 +174,6 @@ function DashboardPage() {
               onClose={handleModalClose}
           />
       )}
-      {/* Mobile overlay */}
       {isMobileMenuOpen && (
         <div 
           className={styles.mobileOverlay}
