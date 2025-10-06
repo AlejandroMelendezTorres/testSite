@@ -41,10 +41,14 @@
   margin-bottom: 20px;
 }
 
+/* 💥 EDITED: Constrain the width of the logo image */
 .logo {
-  font-size: 1.8em;
+  /* Removed font-size property as it applies to text, not the image */
+  max-width: 80%; /* Ensure it takes up a maximum of 80% of the container width */
+  height: auto; /* Maintain aspect ratio */
   margin: 0;
-  font-weight: 700;
+  display: block; /* Treat as a block element for width/margin properties */
+  margin: 0 auto; /* Center the image within its container */
 }
 
 .tagline {

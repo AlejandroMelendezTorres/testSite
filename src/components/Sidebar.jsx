@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './Sidebar.module.css'; 
 import NavLink from './NavLink';
 import UserBox from './UserBox';
+// 💥 NEW IMPORT: Import the logo image file from src/assets
+import logoImage from '../assets/logo.png'; 
 
 // Data for the navigation links
 const navLinks = [
@@ -35,7 +37,8 @@ function Sidebar({ isMobileMenuOpen, toggleMenu }) {
       
       {/* A. Logo Section */}
       <div className={styles.logoContainer}>
-        <img src="../assets/logo.png" alt="App Logo" className={styles.logo} />
+        {/* 💥 EDITED: Use the imported logoImage variable as the src */}
+        <img src={logoImage} alt="App Logo" className={styles.logo} />
       </div>
 
       <hr className={styles.divider} />
